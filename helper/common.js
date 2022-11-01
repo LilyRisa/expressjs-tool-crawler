@@ -32,3 +32,9 @@ const slugify = (string) => {
 const movefile = (url, dest) => {
 
 }
+
+module.exports = {
+    checkslugorigin,
+    slugify,
+    movefile
+}
