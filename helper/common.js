@@ -1,4 +1,8 @@
 var fs = require('fs');
+const DB = require('./DB');
+const {config} = require('./env');
+const FormData = require('form-data');
+const axios = require('axios');
 
 const checkslugorigin = (slug) => {
     let data = slug.split('');
@@ -29,9 +33,36 @@ const slugify = (string) => {
         .replace(/-+$/, '')
 }
 
-const movefile = (url, dest) => {
+const movefile = async(url, dest) => {
+    url = 'https:'+url;
 
+    let filename = url.split('/');
+    filename = filename[filename.length - 1];
+
+    let token = await DB.table('token_api').first();
+    const form = new FormData();
+    form.append('image', url);
+    form.append('filename', filename);
+    console.log(url, filename, token);
+    try{
+        let data = await axios({
+            method: 'post',
+            url: config('api.url')+'/api/upload-img-via-url',
+            data: form,
+            headers: {
+                'Content-Type': `multipart/form-data; boundary=${form._boundary}`,
+                'token': token.token,
+            },
+        });
+        return typeof data.data.path == 'undefined' ? '' : data.data.path;
+    }catch (error) {
+        console.error(error.response.data);     // NOTE - use "error.response.data` (not "error")
+        return '';
+    }
+    
+    
 }
+
 
 module.exports = {
     checkslugorigin,

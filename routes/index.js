@@ -17,6 +17,9 @@ router.post('/api/test', checkToken, function(req, res) {
 });
 
 router.post('/api/view-page', checkToken, IndexController.viewHtml);
+router.post('/api/get-story', checkToken, IndexController.get_truyen);
+router.post('/api/insert-story', checkToken, IndexController.insert_truyen);
+router.post('/api/insert-chapter', checkToken, IndexController.insert_chapter);
 
 
 module.exports = router;

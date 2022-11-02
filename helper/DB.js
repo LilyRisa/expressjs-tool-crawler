@@ -191,7 +191,7 @@ module.exports = class DB{
         return this;
     }
   
-    static async excute(...sql){
+    static async execute(...sql){
         if(DB.__connection == null){
             const CONFIG_DB = {
                 host: config('database.host'),
